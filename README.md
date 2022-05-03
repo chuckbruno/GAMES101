@@ -30,3 +30,9 @@ displacement
 
 Beizer Curve
 ![08](/images/beizerCurve.png)
+
+### 作业5 Ray Tracing
+
+Ray Tracing
+![09](/images/03.png)
+
