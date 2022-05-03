@@ -11,28 +11,28 @@ All homeworks when I have learned GAMES101 classes
 
 ### 作业3 Shading
 
-phong shading
+**phong shading**  
 ![03](/images/output_phong.png)
 
-texture
+**texture**  
 ![04](/images/output_texture.png)
 
-normal
+**normal**  
 ![05](/images/output_normal.png)
 
-bump
+**bump**  
 ![06](/images/output_bump.png)
 
-displacement
+**displacement**  
 ![07](/images/output_displacement.png)
 
 ### 作业4 Geometry
 
-Beizer Curve
+**Beizer Curve**  
 ![08](/images/beizerCurve.png)
+
 
 ### 作业5 Ray Tracing
 
-Ray Tracing
 ![09](/images/03.png)
 
