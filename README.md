@@ -36,3 +36,7 @@ All homeworks when I have learned GAMES101 classes
 
 ![09](/images/03.png)
 
+### 作业6 BVH加速结构
+
+![10](/images/04.png)
+

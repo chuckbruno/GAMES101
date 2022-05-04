@@ -93,7 +93,7 @@ inline Vector3f lerp(const Vector3f& a, const Vector3f& b, const float& t)
     return a * (1 - t) + b * t;
 }
 
-inline Vector3f normalize(const Vector3f& v)
+inline Vector3f normalize   (const Vector3f& v)
 {
     float mag2 = v.x * v.x + v.y * v.y + v.z * v.z;
     if (mag2 > 0)
