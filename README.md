@@ -40,3 +40,23 @@ All homeworks when I have learned GAMES101 classes
 
 ![10](/images/04.png)
 
+### 作业7 Path Tracing
+
+**PPS: 64**  
+![11](/images/pathtracing64.jpg)
+
+**PPS: 256**  
+![12](/images/pathtracing256.jpg)
+
+**Microfacet Model**  
+![13](/images/pathtracingmicrofacet.jpg)
+
+#### Breakdown
+**在判断光线和BBox相交时，没有算tenter>=texit导致就是大片黑的** 
+![14](/images/pathtracingnoequal.jpg)
+
+**计算shadow时，要判断光和光源相交还是和别的物体相交** 
+![15](/images/pathtracingnoshadow.jpg)
+
+
+

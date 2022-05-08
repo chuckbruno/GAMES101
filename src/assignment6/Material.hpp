@@ -25,7 +25,6 @@ public:
     inline Vector3f getColorAt(double u, double v);
     inline Vector3f getEmission();
 
-
 };
 
 Material::Material(MaterialType t, Vector3f c, Vector3f e){
@@ -41,4 +40,5 @@ Vector3f Material::getEmission() {return m_emission;}
 Vector3f Material::getColorAt(double u, double v) {
     return Vector3f();
 }
+
 #endif //RAYTRACING_MATERIAL_H

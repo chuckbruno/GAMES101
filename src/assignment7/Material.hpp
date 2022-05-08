@@ -7,7 +7,7 @@
 
 #include "Vector.hpp"
 
-enum MaterialType { DIFFUSE};
+enum MaterialType { DIFFUSE, MICROFACET};
 
 class Material{
 private:
@@ -108,6 +108,10 @@ public:
     // given a ray, calculate the contribution of this ray
     inline Vector3f eval(const Vector3f &wi, const Vector3f &wo, const Vector3f &N);
 
+	inline float DistributionGGX(Vector3f N, Vector3f H, float roughness);
+	inline float GeometrySchlickGGX(float NdotV, float roughtness);
+	inline float GeometrySmith(Vector3f N, Vector3f V, Vector3f L, float roughtness);
+
 };
 
 Material::Material(MaterialType t, Vector3f e){
@@ -142,6 +146,17 @@ Vector3f Material::sample(const Vector3f &wi, const Vector3f &N){
             
             break;
         }
+        case MICROFACET:
+        {
+			// uniform sample on the hemisphere
+			float x_1 = get_random_float(), x_2 = get_random_float();
+			float z = std::fabs(1.0f - 2.0f * x_1);
+			float r = std::sqrt(1.0f - z * z), phi = 2 * M_PI * x_2;
+			Vector3f localRay(r * std::cos(phi), r * std::sin(phi), z);
+			return toWorld(localRay, N);
+
+			break;
+        }
     }
 }
 
@@ -156,7 +171,52 @@ float Material::pdf(const Vector3f &wi, const Vector3f &wo, const Vector3f &N){
                 return 0.0f;
             break;
         }
+        case MICROFACET:
+        {
+			// uniform sample probability 1 / (2 * PI)
+			if (dotProduct(wo, N) > 0.0f)
+				return 0.5f / M_PI;
+			else
+				return 0.0f;
+			break;
+        }
     }
+}
+
+
+float Material::DistributionGGX(Vector3f N, Vector3f H, float roughness)
+{
+	float a = roughness * roughness;
+	float a2 = a * a;
+	float NdotH = std::max(dotProduct(N, H), 0.0f);
+	float NdotH2 = NdotH * NdotH;
+
+	float nom = a2;
+	float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+	denom = M_PI * denom * denom;
+
+	return nom / std::max(denom, 0.000001f);
+}
+
+
+float Material::GeometrySchlickGGX(float NdotV, float roughtness)
+{
+	float r = (roughtness + 1.0f);
+	float k = (r * r) / 8.0f;
+	float nom = NdotV;
+	float denom = NdotV * (1.0f - k) + k;
+
+	return nom / denom;
+}
+
+float Material::GeometrySmith(Vector3f N, Vector3f V, Vector3f L, float roughtness)
+{
+	float NdotV = std::max(dotProduct(N, V), 0.0f);
+	float NdotL = std::max(dotProduct(N, L), 0.0f);
+	float ggx2 = GeometrySchlickGGX(NdotV, roughtness);
+	float ggx1 = GeometrySchlickGGX(NdotL, roughtness);
+
+	return ggx1 * ggx2;
 }
 
 Vector3f Material::eval(const Vector3f &wi, const Vector3f &wo, const Vector3f &N){
@@ -171,6 +231,46 @@ Vector3f Material::eval(const Vector3f &wi, const Vector3f &wo, const Vector3f &
             }
             else
                 return Vector3f(0.0f);
+            break;
+        }
+        case MICROFACET:
+        {
+            // Disney PBR
+            float cosalpha = dotProduct(N, wo);
+            if (cosalpha > 0.0f)
+            {
+                float roughness = 0.35f;
+                Vector3f V = -wi;
+                Vector3f L = wo;
+                Vector3f H = normalize(V + L);
+
+                // calculate D function, distribution of normals
+                float D = DistributionGGX(N, H, roughness);
+
+                // calculate G function, shadow mask iter
+                float G = GeometrySmith(N, V, L, roughness);
+
+                // calculate F item, fresnel
+                float F;
+                float etat = 1.85;
+                fresnel(wi, N, etat, F);
+
+                Vector3f nominator = D * G * F;
+                float denominator = 4 * std::max(dotProduct(N, V), 0.0f) * std::max(dotProduct(N, V), 0.0f);
+                Vector3f specular = nominator / std::max(denominator, 0.001f);
+
+                // energy conservative
+                float ks_ = F;
+                float kd_ = 1.0f - ks_;
+
+                Vector3f diffuse = 1.0f / M_PI;
+
+                return Ks * specular + kd_ * Kd * diffuse;
+            }
+            else
+            {
+                return Vector3f(0.0f);
+            }
             break;
         }
     }
