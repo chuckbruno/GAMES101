@@ -5,8 +5,7 @@
 typedef uint32_t gid_t;
 
 #include <iostream>
-//#include <unistd.h>
-#include "windows.h"
+#include <unistd.h>
 
 using namespace std;
 using namespace CGL;
@@ -24,25 +23,23 @@ int main(int argc, char **argv) {
   AppConfig config;
   int opt;
 
-  /*while ((opt = getopt(argc, argv, "s:l:t:m:e:h:f:r:c:a:p:")) != -1) {
-	switch (opt) {
-	case 'm':
-	  config.mass = atof(optarg);
-	  break;
-	case 'g':
-	  config.gravity = Vector2D(atof(argv[optind - 1]), atof(argv[optind]));
-	  optind++;
-	  break;
-	case 's':
-	  config.steps_per_frame = atoi(optarg);
-	  break;
-	default:
-	  usage(argv[0]);
-	  return 1;
-	}*/
-
-	//return 1;
- // }
+  while ((opt = getopt(argc, argv, "s:l:t:m:e:h:f:r:c:a:p:")) != -1) {
+    switch (opt) {
+    case 'm':
+      config.mass = atof(optarg);
+      break;
+    case 'g':
+      config.gravity = Vector2D(atof(argv[optind - 1]), atof(argv[optind]));
+      optind++;
+      break;
+    case 's':
+      config.steps_per_frame = atoi(optarg);
+      break;
+    default:
+      usage(argv[0]);
+      return 1;
+    }
+  }
 
   // create application
   Application *app = new Application(config);

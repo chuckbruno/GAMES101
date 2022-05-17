@@ -7,8 +7,6 @@
 #include "matrix4x4.h"
 #include "matrix3x3.h"
 
-#define M_PI 3.141592653589793f
-
 /*
  * Quarternion Class
  *
