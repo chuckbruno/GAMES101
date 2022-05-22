@@ -16,11 +16,14 @@ public:
   Rope(Vector2D start, Vector2D end, int num_nodes, float node_mass, float k,
        vector<int> pinned_nodes);
 
+  ~Rope();
+
   void simulateVerlet(float delta_t, Vector2D gravity);
   void simulateEuler(float delta_t, Vector2D gravity);
 
   vector<Mass *> masses;
   vector<Spring *> springs;
+  float k;
 }; // struct Rope
 }
 #endif /* ROPE_H */

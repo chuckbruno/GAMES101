@@ -58,5 +58,7 @@ All homeworks when I have learned GAMES101 classes
 **计算shadow时，要判断光和光源相交还是和别的物体相交** 
 ![15](/images/pathtracingnoshadow.jpg)
 
-
+### 作业8 Rope Simulation
+![16](/images/rope.png)
+[视频链接](https://www.bilibili.com/video/BV1CY4y167TB/)
 
